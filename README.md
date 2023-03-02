@@ -56,3 +56,31 @@ class CoordinatorAssembly: Assembly {
 
 }
 ```
+
+## ViewModel
+
+For convenience a parent class *ViewModel* is created. This class conforms to *ObservableObject* so the view models can be injected as *ObservedObject* in the various views. It also conforms to *Identifiable* for presenting sheets and *Hashable* for use in a *NavigationStack*.
+
+```swift
+typealias ViewModelDefinition = (ObservableObject & Identifiable & Hashable)
+
+class ViewModel: ViewModelDefinition {
+
+    // MARK: - Identifiable
+
+    let id = UUID()
+
+    // MARK: - Equatable
+
+    static func == (lhs: ViewModel, rhs: ViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    // MARK: - Hashable
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+}
+```
