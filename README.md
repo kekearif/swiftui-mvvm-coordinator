@@ -173,7 +173,7 @@ struct Tab2CoordinatorView: View {
 
 ### Sheets
 
-A sheet is presented by assigning a view model to an optional *Published* property in the *Coordinator*.
+A sheet is presented by assigning a view model to an optional *@Published* property in the *Coordinator*.
 
 ```swift
 private func presentDemoSheet() {
@@ -188,7 +188,7 @@ private func presentDemoSheet() {
 }
 
 ```
-This propety is then used in the *CoordinatorView*
+This propety is then used in the *CoordinatorView*.
 
 ```swift
 var body: some View {
@@ -204,7 +204,7 @@ var body: some View {
 
 ### Tabs
 
-The relevant tab coordinators or view models are stored in view's coordinator
+The relevant tab coordinators or view models are stored in view's coordinator.
 
 ```swift
 let tab1Coordinator: Tab1Coordinator
@@ -212,7 +212,7 @@ let tab2Coordinator: Tab2Coordinator
 let tab3Coordinator: Tab3Coordinator
 ```
 
-These properties are then used in the *CoordinatorView*
+These properties are then used in the *CoordinatorView*.
 
 ```swift
 var body: some View {
@@ -240,7 +240,7 @@ var body: some View {
 
 ### NavigationStack
 
-The *path* for the *NavigationStack* is stored in the *Coordinator*. When navigating to a view a new view model is appended onto the array.
+The *path* of the *NavigationStack* is stored in the *Coordinator*. When navigating to a view, a new view model is appended to the array.
 
 ```swift
 private func navigateToDemoView() {
@@ -248,7 +248,7 @@ private func navigateToDemoView() {
 }
 ```
 
-Since the view models already conform to *hashable* the *path* can easily be inspected using a *switch* statement in the *CoordinatorView* and the relevant view pushed.
+Since the view models already conform to *Hashable* the *path* can easily be inspected using a *Switch* statement in the *CoordinatorView* and the relevant view pushed.
 
 ```swift
 var body: some View {
