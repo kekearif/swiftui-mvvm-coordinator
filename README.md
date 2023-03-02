@@ -96,7 +96,7 @@ final class Tab2Coordinator: ViewModel {
 
     @Published var sheetDemoViewModel: SheetDemoViewModel?
 
-    // root view model
+    // Root view model
     let tab2ViewModel: Tab2ViewModel
 
     private let resolver: Resolver
