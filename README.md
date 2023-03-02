@@ -135,3 +135,36 @@ final class Tab2Coordinator: ViewModel {
 
 }
 ```
+
+## CoordinatorView
+
+Each view that needs navigation must be wrapped in a *CoordinatorView*. The *CoordinatorView* holds a reference to the *Coordinator* and will manage navigation such as sheets, tabs and *NavigationStack*.
+
+```Swift
+struct Tab2CoordinatorView: View {
+
+    // MARK: - Properties
+
+    @ObservedObject private var coordinator: Tab2Coordinator
+
+    // MARK: - Views
+
+    var body: some View {
+        NavigationStack {
+            // Wrapped view
+            Tab2(viewModel: coordinator.tab2ViewModel)
+                // Navigation managed by the coordinator
+                .sheet(item: $coordinator.sheetDemoViewModel) {
+                    SheetDemo(viewModel: $0)
+                }
+        }
+    }
+
+    // MARK: - Initializers
+
+    init(coordinator: Tab2Coordinator) {
+        self.coordinator = coordinator
+    }
+
+}
+```
