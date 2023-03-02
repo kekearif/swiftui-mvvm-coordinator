@@ -7,11 +7,13 @@
 
 import SwiftUI
 
+private let appAssembler: AppAssembler = AppAssembler()
+
 @main
 struct swiftui_mvvm_coordinatorApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainCoordinatorView(coordinator: appAssembler.resolver.resolve(MainCoordinator.self)!)
         }
     }
 }
