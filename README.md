@@ -84,3 +84,54 @@ class ViewModel: ViewModelDefinition {
 
 }
 ```
+
+## Coordinator
+
+The *coordinator* stores the various view models and coordinators needed for a view in *Published* properties. When a coordinator is init with its root view model its events are also bound to various navigation methods that will set the *Published* properties.
+
+```swift
+final class Tab2Coordinator: ViewModel {
+
+    // MARK: - Properties
+
+    @Published var sheetDemoViewModel: SheetDemoViewModel?
+
+    // root view model
+    let tab2ViewModel: Tab2ViewModel
+
+    private let resolver: Resolver
+    private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - Initializers
+
+    init(resolver: Resolver, tab2ViewModel: Tab2ViewModel) {
+        self.resolver = resolver
+        self.tab2ViewModel = tab2ViewModel
+
+        super.init()
+
+        bindEvents()
+    }
+
+    // MARK: - Binding
+
+    private func bindEvents() {
+        tab2ViewModel.event.presentDemoSheetButtonTapped
+            .sink { [weak self] _ in self?.presentDemoSheet() }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Navigation
+
+    private func presentDemoSheet() {
+        let sheetDemoViewModel = resolver.resolve(SheetDemoViewModel.self)!
+
+        sheetDemoViewModel.event.dismissButtonTapped
+            .map { _ in nil }
+            .assign(to: &$sheetDemoViewModel)
+
+        self.sheetDemoViewModel = sheetDemoViewModel
+    }
+
+}
+```
