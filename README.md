@@ -87,7 +87,7 @@ class ViewModel: ViewModelDefinition {
 
 ## Coordinator
 
-The *coordinator* stores the various view models and coordinators needed for a view in *Published* properties. When a coordinator is init with its root view model its events are also bound to various navigation methods that will set the *Published* properties. Either delegation or *Combine* can be used for handling events.
+The coordinator stores the various view models and coordinators needed for a view in *@Published* properties. When a coordinator is initialized with its root view model, its events are bound to various navigation methods that will set the *@Published* properties. Either delegation or *Combine* can be used for handling events.
 
 ```swift
 final class Tab2Coordinator: ViewModel {
