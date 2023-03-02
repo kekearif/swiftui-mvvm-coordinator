@@ -87,7 +87,7 @@ class ViewModel: ViewModelDefinition {
 
 ## Coordinator
 
-The *coordinator* stores the various view models and coordinators needed for a view in *Published* properties. When a coordinator is init with its root view model its events are also bound to various navigation methods that will set the *Published* properties.
+The *coordinator* stores the various view models and coordinators needed for a view in *Published* properties. When a coordinator is init with its root view model its events are also bound to various navigation methods that will set the *Published* properties. Either delegation or *Combine* can be used for handling events.
 
 ```swift
 final class Tab2Coordinator: ViewModel {
@@ -166,5 +166,103 @@ struct Tab2CoordinatorView: View {
         self.coordinator = coordinator
     }
 
+}
+```
+
+## Navigation
+
+### Sheets
+
+A sheet is presented by assigning a view model to an optional *Published* property in the *Coordinator*.
+
+```swift
+private func presentDemoSheet() {
+    let sheetDemoViewModel = resolver.resolve(SheetDemoViewModel.self)!
+
+    sheetDemoViewModel.event.dismissButtonTapped
+        .map { _ in nil }
+        .assign(to: &$sheetDemoViewModel)
+
+    // Assign to published property
+    self.sheetDemoViewModel = sheetDemoViewModel
+}
+
+```
+This propety is then used in the *CoordinatorView*
+
+```swift
+var body: some View {
+    NavigationStack {
+        // Wrapped view
+        Tab2(viewModel: coordinator.tab2ViewModel)
+            .sheet(item: $coordinator.sheetDemoViewModel) {
+                SheetDemo(viewModel: $0)
+            }
+    }
+}
+```
+
+### Tabs
+
+The relevant tab coordinators or view models are stored in view's coordinator
+
+```swift
+let tab1Coordinator: Tab1Coordinator
+let tab2Coordinator: Tab2Coordinator
+let tab3Coordinator: Tab3Coordinator
+```
+
+These properties are then used in the *CoordinatorView*
+
+```swift
+var body: some View {
+    TabView(selection: $coordinator.selectedTab) {
+        Tab1CoordinatorView(coordinator: coordinator.tab1Coordinator)
+            .tabItem {
+                Constants.tab1Image
+            }
+            .tag(MainCoordinator.Tab.one)
+
+        Tab2CoordinatorView(coordinator: coordinator.tab2Coordinator)
+            .tabItem {
+                Constants.tab2Image
+            }
+            .tag(MainCoordinator.Tab.two)
+
+        Tab3CoordinatorView(coordinator: coordinator.tab3Coordinator)
+            .tabItem {
+                Constants.tab3Image
+            }
+            .tag(MainCoordinator.Tab.three)
+    }
+}
+```
+
+### NavigationStack
+
+The *path* for the *NavigationStack* is stored in the *Coordinator*. When navigating to a view a new view model is appended onto the array.
+
+```swift
+private func navigateToDemoView() {
+    path.append(resolver.resolve(NavigationStackDemoViewModel.self)!)
+}
+```
+
+Since the view models already conform to *hashable* the *path* can easily be inspected using a *switch* statement in the *CoordinatorView* and the relevant view pushed.
+
+```swift
+var body: some View {
+    NavigationStack(path: $coordinator.path) {
+        // Wrapped view
+        Tab3(viewModel: coordinator.tab3ViewModel)
+            .navigationDestination(for: ViewModel.self) { viewModel in
+                switch viewModel {
+                case let navigationStackDemoViewModel as NavigationStackDemoViewModel:
+                    NavigationStackDemo(viewModel: navigationStackDemoViewModel)
+                default:
+                    EmptyView()
+                }
+            }
+    }
 }
 ```
