@@ -1,9 +1,9 @@
 # The MVVM Coordinator Pattern in SwiftUI
 A demo on how to cleanly isolate business logic, view logic, and navigation logic in SwiftUI.
 
-## SwinJect
+## Swinject
 
-The [SwinJect](https://github.com/Swinject/Swinject) package is used for dependency injection. A main *AppAssembler* class is created to build the various sub assemblers.
+The [Swinject](https://github.com/Swinject/Swinject) package is used for dependency injection. A main *AppAssembler* class is created to build the various sub assemblers.
 
 ```swift
 final class AppAssembler {
